@@ -12,8 +12,6 @@ func DatabaseInit() *gorm.DB {
 	if err != nil {
 		panic("failed to connect database")
 	}
-
-	// Migrate the schema
 	db.AutoMigrate(&entity.Act{})
 
 	return db

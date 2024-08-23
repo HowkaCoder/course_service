@@ -3,6 +3,7 @@ package repository
 import (
 	"course_service/internal/app/entity"
 
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
@@ -14,11 +15,12 @@ type ActRepository interface {
 }
 
 type actRepostiory struct {
-	db *gorm.DB
+	rdb *redis.Client
+	db  *gorm.DB
 }
 
-func NewActRepository(db *gorm.DB) *actRepostiory {
-	return &actRepostiory{db: db}
+func NewActRepository(db *gorm.DB, rdb *redis.Client) *actRepostiory {
+	return &actRepostiory{db: db, rdb: rdb}
 }
 
 func (r *actRepostiory) GetActsByAnswerID(id uint) ([]entity.Act, error) {

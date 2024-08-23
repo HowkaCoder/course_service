@@ -6,17 +6,24 @@ import (
 	"course_service/internal/app/repository"
 	"course_service/internal/app/usecase"
 
+	"github.com/redis/go-redis/v9"
+
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var (
+	DB  *gorm.DB
+	RDB *redis.Client
+)
 
 func main() {
 
 	DB = internal.DatabaseInit()
 
-	actRepository := repository.NewActRepository(DB)
+	RDB = internal.RedisInit()
+
+	actRepository := repository.NewActRepository(DB, RDB)
 	actUsecase := usecase.NewActUsecase(actRepository)
 	actHandler := handler.NewActHandler(actUsecase)
 
